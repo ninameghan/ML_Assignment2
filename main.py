@@ -31,8 +31,6 @@ def main():
     # TASK 6
     support_vector_machine(labels, features, sample_sizes)
 
-    # TASK 7
-
 
 # TASK 1
 def load_data():
@@ -91,7 +89,6 @@ def evaluation(labels, features, classifier, sample_size):
         # Measure processing time for prediction
         start_time_pred = time.time()
         prediction = clf.predict(test_features)
-        print(len(test_features))
         prediction_time = time.time() - start_time_pred
         time_pred.append(prediction_time)
 
@@ -108,14 +105,14 @@ def evaluation(labels, features, classifier, sample_size):
 def show_results(accuracy, time_train, time_pred):
     # Training time per training sample
     # Minimum
-    # min_time_train = np.min(time_train)
-    # print("Minimum processing time (Train):\n", min_time_train)
-    # # Maximum
-    # max_time_train = np.max(time_train)
-    # print("Maximum processing time (Train):\n", max_time_train)
-    # # Average
-    # avg_time_train = np.mean(time_train)
-    # print("Average processing time (Train):\n", avg_time_train)
+    min_time_train = np.min(time_train)
+    print("Minimum processing time (Train):\n", min_time_train)
+    # Maximum
+    max_time_train = np.max(time_train)
+    print("Maximum processing time (Train):\n", max_time_train)
+    # Average
+    avg_time_train = np.mean(time_train)
+    print("Average processing time (Train):\n", avg_time_train)
 
     # Prediction time per evaluation sample
     # Minimum
@@ -130,14 +127,14 @@ def show_results(accuracy, time_train, time_pred):
 
     # Prediction accuracy
     # Minimum
-    # min_acc_test = np.min(accuracy)
-    # print("Minimum prediction accuracy (Test):\n", min_acc_test)
-    # # Maximum
-    # max_acc_test = np.max(accuracy)
-    # print("Maximum prediction accuracy (Test):\n", max_acc_test)
-    # # Average
-    # avg_acc_test = np.mean(accuracy)
-    # print("Average prediction accuracy (Test):\n", avg_acc_test)
+    min_acc_test = np.min(accuracy)
+    print("Minimum prediction accuracy (Test):\n", min_acc_test)
+    # Maximum
+    max_acc_test = np.max(accuracy)
+    print("Maximum prediction accuracy (Test):\n", max_acc_test)
+    # Average
+    avg_acc_test = np.mean(accuracy)
+    print("Average prediction accuracy (Test):\n", avg_acc_test)
 
 
 def evaluate_classifier(labels, features, classifier, sample_sizes):
@@ -159,7 +156,6 @@ def perceptron(labels, features, sample_sizes):
     accuracies, times_train, times_pred = evaluate_classifier(labels, features, Perceptron(), sample_sizes)
     # Mean prediction accuracy for Perceptron classifier
     print("\nMean prediction accuracy for Perceptron classifier:", np.mean(accuracies))
-    print(times_pred)
     # Plot relationship between input data size and runtimes
     plt.figure()
     plt.plot(sample_sizes, times_pred)
