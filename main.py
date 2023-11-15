@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn import metrics
 from sklearn.linear_model import Perceptron
+from sklearn.tree import DecisionTreeClassifier
 import time
 
 
@@ -18,7 +19,9 @@ def main():
 
     # TASK 3
     perceptron(labels, features, sample_sizes)
+
     # TASK 4
+    decision_tree(labels, features, sample_sizes)
 
     # TASK 5
 
@@ -150,10 +153,23 @@ def evaluate_classifier(labels, features, classifier, sample_sizes):
 def perceptron(labels, features, sample_sizes):
     accuracies, times_train, times_pred = evaluate_classifier(labels, features, Perceptron, sample_sizes)
     # Mean prediction accuracy for Perceptron classifier
-    print("\nMean prediction accuracy for Perceptron classifier:", np.mean(accuracies))
+    print("\nMean prediction accuracy for Perceptron classifier:\n", np.mean(accuracies))
     plt.figure()
     plt.plot(sample_sizes, times_pred)
     plt.title("Perceptron Classifier")
+    plt.xlabel("Sample Size")
+    plt.ylabel("Prediction Runtime")
+    plt.show()
+
+
+# TASK 4
+def decision_tree(labels, features, sample_sizes):
+    accuracies, times_train, times_pred = evaluate_classifier(labels, features, DecisionTreeClassifier, sample_sizes)
+    # Mean prediction accuracy for Decision Tree classifier
+    print("\nMean prediction accuracy for Decision Tree classifier:", np.mean(accuracies))
+    plt.figure()
+    plt.plot(sample_sizes, times_pred)
+    plt.title("Decision Tree Classifier")
     plt.xlabel("Sample Size")
     plt.ylabel("Prediction Runtime")
     plt.show()
