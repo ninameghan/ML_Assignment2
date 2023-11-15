@@ -4,11 +4,12 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn import metrics
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import Perceptron
 import time
 
 
 def main():
+    sample_sizes = [1000, 5000, 10000]
     # TASK 1
     labels, features = load_data()
 
@@ -16,7 +17,7 @@ def main():
     # accuracy, time_train, time_pred = evaluation(labels, features, DecisionTreeClassifier, 1000)
 
     # TASK 3
-
+    perceptron(labels, features, sample_sizes)
     # TASK 4
 
     # TASK 5
@@ -60,6 +61,9 @@ def evaluation(labels, features, classifier, sample_size):
     accuracy = []
     time_train = []
     time_pred = []
+
+    labels = labels[:sample_size]
+    features = features[:sample_size]
 
     # Cross validation loop splitting training & test data
     for train_index, test_index in kf.split(features):
@@ -128,10 +132,31 @@ def show_results(accuracy, time_train, time_pred):
     print("Average prediction accuracy (Test):\n", avg_acc_test)
 
 
-def evauluate_classifier(labels, features, classifier, sample_sizes):
+def evaluate_classifier(labels, features, classifier, sample_sizes):
+    accuracies = []
+    times_train = []
+    times_pred = []
     for sample_size in sample_sizes:
-        accuracy, time_train, time_pred = evaluation(labels, features, classifier,sample_size)
+        accuracy, time_train, time_pred = evaluation(labels, features, classifier, sample_size)
         show_results(accuracy, time_train, time_pred)
+        accuracies.append(np.mean(accuracy))
+        times_train.append(np.mean(time_train))
+        times_pred.append(np.mean(time_pred))
+
+    return accuracies, times_train, times_pred
+
+
+# TASK 3
+def perceptron(labels, features, sample_sizes):
+    accuracies, times_train, times_pred = evaluate_classifier(labels, features, Perceptron, sample_sizes)
+    # Mean prediction accuracy for Perceptron classifier
+    print("\nMean prediction accuracy for Perceptron classifier:", np.mean(accuracies))
+    plt.figure()
+    plt.plot(sample_sizes, times_pred)
+    plt.title("Perceptron Classifier")
+    plt.xlabel("Sample Size")
+    plt.ylabel("Prediction Runtime")
+    plt.show()
 
 
 main()
