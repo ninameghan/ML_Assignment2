@@ -6,6 +6,7 @@ from sklearn.model_selection import KFold
 from sklearn import metrics
 from sklearn.linear_model import Perceptron
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import time
 
 
@@ -24,6 +25,7 @@ def main():
     decision_tree(labels, features, sample_sizes)
 
     # TASK 5
+    k_nearest_neighbour(labels, features, sample_sizes)
 
     # TASK 6
 
@@ -76,7 +78,7 @@ def evaluation(labels, features, classifier, sample_size):
         test_labels = labels.iloc[test_index]
 
         # Create instance of specified classifier
-        clf = classifier()
+        clf = classifier
 
         # Measure processing time for training
         start_time = time.time()
@@ -151,9 +153,11 @@ def evaluate_classifier(labels, features, classifier, sample_sizes):
 
 # TASK 3
 def perceptron(labels, features, sample_sizes):
-    accuracies, times_train, times_pred = evaluate_classifier(labels, features, Perceptron, sample_sizes)
+    accuracies, times_train, times_pred = evaluate_classifier(labels, features, Perceptron(), sample_sizes)
     # Mean prediction accuracy for Perceptron classifier
-    print("\nMean prediction accuracy for Perceptron classifier:\n", np.mean(accuracies))
+    print("\nMean prediction accuracy for Perceptron classifier:", np.mean(accuracies))
+    print()
+    # Plot relationship between input data size and runtimes
     plt.figure()
     plt.plot(sample_sizes, times_pred)
     plt.title("Perceptron Classifier")
@@ -164,12 +168,41 @@ def perceptron(labels, features, sample_sizes):
 
 # TASK 4
 def decision_tree(labels, features, sample_sizes):
-    accuracies, times_train, times_pred = evaluate_classifier(labels, features, DecisionTreeClassifier, sample_sizes)
+    accuracies, times_train, times_pred = evaluate_classifier(labels, features, DecisionTreeClassifier(), sample_sizes)
     # Mean prediction accuracy for Decision Tree classifier
     print("\nMean prediction accuracy for Decision Tree classifier:", np.mean(accuracies))
+    print()
+    # Plot relationship between input data size and runtimes
     plt.figure()
     plt.plot(sample_sizes, times_pred)
     plt.title("Decision Tree Classifier")
+    plt.xlabel("Sample Size")
+    plt.ylabel("Prediction Runtime")
+    plt.show()
+
+
+# TASK 5
+def k_nearest_neighbour(labels, features, sample_sizes):
+    # Determine best k value based on mean prediction accuracy
+    acc_scores = []
+    for k in range(1, 10):
+        accuracies, times_train, times_pred = evaluate_classifier(labels, features, KNeighborsClassifier(n_neighbors=k), sample_sizes)
+        acc_scores.append(np.mean(accuracies))
+
+    # Evaluation with optimal k-value
+    max_acc = np.max(acc_scores)
+    optimal_k_value = acc_scores.index(max_acc) + 1
+    accuracies, times_train, times_pred = evaluate_classifier(labels, features, KNeighborsClassifier(n_neighbors=optimal_k_value), sample_sizes)
+    print("\nOptimal k-value:", optimal_k_value)
+
+    # Best mean prediction accuracy for K-Nearest Neighbour classifier
+    print("Best mean prediction accuracy for K-Nearest Neighbour classifier:", np.mean(accuracies))
+    print()
+
+    # Plot relationship between input data size and runtimes for optimal classifier
+    plt.figure()
+    plt.plot(sample_sizes, times_pred)
+    plt.title("K-Nearest Neighbour Classifier")
     plt.xlabel("Sample Size")
     plt.ylabel("Prediction Runtime")
     plt.show()
