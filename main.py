@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -12,7 +11,7 @@ import time
 
 
 def main():
-    sample_sizes = [500, 1000, 1500]
+    sample_sizes = [1000, 5000, 10000]
     # TASK 1
     labels, features = load_data()
 
@@ -94,7 +93,7 @@ def evaluation(labels, features, classifier, sample_size):
 
         # Determine confusion matrix
         c_matrix = metrics.confusion_matrix(test_labels, prediction)
-        # print("Confusion Matrix:\n", c_matrix)
+        print("Confusion Matrix:\n", c_matrix)
 
         # Determine accuracy score
         accuracy.append(metrics.accuracy_score(test_labels, prediction))
@@ -170,8 +169,6 @@ def decision_tree(labels, features, sample_sizes):
     accuracies, times_train, times_pred = evaluate_classifier(labels, features, DecisionTreeClassifier(), sample_sizes)
     # Mean prediction accuracy for Decision Tree classifier
     print("\nMean prediction accuracy for Decision Tree classifier:", np.mean(accuracies))
-    print(sample_sizes)
-    print(times_pred)
     # Plot relationship between input data size and runtimes
     plt.figure()
     plt.plot(sample_sizes, times_pred)
@@ -194,8 +191,9 @@ def k_nearest_neighbour(labels, features, sample_sizes):
     max_acc = np.max(acc_scores)
     optimal_k_value = acc_scores.index(max_acc) + 1
     accuracies_optimal, times_train_optimal, times_pred_optimal = evaluate_classifier(labels, features,
-                                                              KNeighborsClassifier(n_neighbors=optimal_k_value),
-                                                              sample_sizes)
+                                                                                      KNeighborsClassifier(
+                                                                                          n_neighbors=optimal_k_value),
+                                                                                      sample_sizes)
     print("\nOptimal k-value:", optimal_k_value)
 
     # Best mean prediction accuracy for K-Nearest Neighbour classifier
